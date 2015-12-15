@@ -1,0 +1,60 @@
+---
+title: "Retrieving Substance Information"
+author: "Matthew O'Meara"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+This vignette describes several use cases for retrieving substance information from zinc15.docking.org using the `Zn` R package.
+
+To follow along, make sure Zn package is installed
+
+```{r, fig.show='hold'}
+install.packages("devtools")
+devtools::install_github("momeara/Zn")
+```
+
+And familiarize yourself with with `http://zinc15.docking.org
+
+## Searching for Substance info
+
+Tanaka et al., (2015, 10.1371/journal.pone.0135657) observe uremic
+solutes that accumulate when the kidneys fail. In Supplementary table
+2, they list the 120 uremic compounds they observe. Here are the ones with HMDB Ids:
+
+```{r, fig.show='hold'}
+uremic_solutes <- c("HMDB00001", "HMDB00017", "HMDB00020", 
+"HMDB00056", "HMDB00089", "HMDB00098", "HMDB00107", "HMDB00123", 
+"HMDB00134", "HMDB00174", "HMDB00197", "HMDB00209", "HMDB00210", 
+"HMDB00211", "HMDB00226", "HMDB00230", "HMDB00232", "HMDB00244", 
+"HMDB00258", "HMDB00291", "HMDB00294", "HMDB00439", "HMDB00462", 
+"HMDB00479", "HMDB00484", "HMDB00512", "HMDB00539", "HMDB00552", 
+"HMDB00562", "HMDB00613", "HMDB00625", "HMDB00640", "HMDB00646", 
+"HMDB00671", "HMDB00678", "HMDB00679", "HMDB00682", "HMDB00714", 
+"HMDB00715", "HMDB00730", "HMDB00736", "HMDB00765", "HMDB00766", 
+"HMDB00767", "HMDB00821", "HMDB00840", "HMDB00904", "HMDB00939", 
+"HMDB00943", "HMDB00956", "HMDB00959", "HMDB01015", "HMDB01123", 
+"HMDB01173", "HMDB01851", "HMDB01931", "HMDB02123", "HMDB02271", 
+"HMDB02759", "HMDB02820", "HMDB02931", "HMDB02994", "HMDB03099", 
+"HMDB03464", "HMDB03466", "HMDB03681", "HMDB03911", "HMDB04136", 
+"HMDB04193", "HMDB04812", "HMDB04824", "HMDB04827", "HMDB06088", 
+"HMDB06116", "HMDB06344", "HMDB06584", "HMDB06695", "HMDB11103", 
+"HMDB11107", "HMDB11170", "HMDB11621", "HMDB11635", "HMDB11719", 
+"HMDB11745", "HMDB11757", "HMDB12881", "HMDB13130", "HMDB13240", 
+"HMDB13678", "HMDB13713", "HMDB29723", "HMDB29738", "HMDB32055", 
+"HMDB34220", "HMDB41623", "HMDB59724", "HMDB60015", "HMDB60256", 
+"HMDB61116")
+```
+
+To retrieve information about these compounds we can use `Zr` package
+
+```{r, fig.show='hold'}
+library(Zr)
+library(dplyr)
+s_info <- search_for_substances(uremic_solutes, verbose=T)
+s_info %>% str
+```
