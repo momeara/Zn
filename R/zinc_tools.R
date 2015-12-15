@@ -24,8 +24,8 @@ zinc_REST <- function(
 	verbose=F
 ){
 	url <- paste(zinc_base_url, path, sep="/") %>%
-		httr::parse_url %>%
-		httr::build_url
+		httr::parse_url() %>%
+		httr::build_url()
 
 
 	make_request <- function(url, post_data){
@@ -90,10 +90,10 @@ zinc_REST <- function(
 			cat("writing temporary results to '", data_page_tmp_fname, "_<page>.csv\n", sep="")
 		}
 		while(!done){
-			url_page <- url %>% httr::parse_url
+			url_page <- url %>% httr::parse_url()
 			url_page$query$page <- page
 			url_page$query$count <- result_batch_size
-			url_page <- url_page %>% httr::build_url
+			url_page <- url_page %>% httr::build_url()
 			data_page <- httr::make_request(url_page, post_data)
 
 			data_page %>% readr::write_csv(paste0(data_page_tmp_fname, "_", page, ".csv"))
@@ -117,9 +117,9 @@ zinc_REST <- function(
 			}
 		}
 	} else {
-		url <- url %>% httr::parse_url
+		url <- url %>% httr::parse_url()
 		url$query$count <- count
-		url <- url %>% httr::build_url
+		url <- url %>% httr::build_url()
 		data <- httr::make_request(url, post_data)
 	}
 	return(data)
@@ -303,8 +303,8 @@ sea_score <- function(
 ){
 	input_base <- paste(tempfile(), run_tag, sep="_")
 	url <- paste(sea_base_url, url_path, sep="/") %>%
-		httr::parse_url %>%
-		httr::build_url
+		httr::parse_url() %>%
+		httr::build_url()
 
 	if(verbose){
 		cat("url: ", url, "\n")
@@ -378,8 +378,8 @@ tc_matrix <- function(
 ){
 	input_base <- paste(tempfile(), run_tag, sep="_")
 	url <- paste(sea_base_url, url_path, sep="/") %>%
-		httr::parse_url %>%
-		httr::build_url
+		httr::parse_url() %>%
+		httr::build_url()
 
 	if(verbose){
 		cat("url: ", url, "\n")
@@ -483,8 +483,8 @@ sea_illustrate_smiles <- function(
 	url_path="/custom/search/single"
 ){
 	url <- paste(sea_base_url, url_path, sep="/") %>%
-		httr::parse_url %>%
-		httr::build_url
+		httr::parse_url() %>%
+		httr::build_url()
 
 	if(verbose){
 		cat("url: ", url, "\n")
