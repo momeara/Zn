@@ -94,7 +94,7 @@ zinc_REST <- function(
 			url_page$query$page <- page
 			url_page$query$count <- result_batch_size
 			url_page <- url_page %>% httr::build_url()
-			data_page <- httr::make_request(url_page, post_data)
+			data_page <- make_request(url_page, post_data)
 
 			data_page %>% readr::write_csv(paste0(data_page_tmp_fname, "_", page, ".csv"))
 
@@ -120,7 +120,7 @@ zinc_REST <- function(
 		url <- url %>% httr::parse_url()
 		url$query$count <- count
 		url <- url %>% httr::build_url()
-		data <- httr::make_request(url, post_data)
+		data <- make_request(url, post_data)
 	}
 	return(data)
 }
