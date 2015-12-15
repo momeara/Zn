@@ -1,4 +1,4 @@
-Package: Zn
+Package: Zr
 Type: Package
 Version: 0.0.0.9000
 Title: R client for the zinc15.docking.org
@@ -8,9 +8,9 @@ Authors@R: person("Matthew", "O'Meara", email = "mattjomeara@gmail.com",
     role = c("aut", "cre"))
 URL: http://github.com/momeara/Zr
 BugReports: https://github.com/momeara/Zr/issues
-Depends:
+Depends: 
     R (>= 3.1.2)
-Imports:
+Imports: 
     assertthat,
     plyr,
     dplyr,
@@ -23,3 +23,6 @@ Collage: 'r_utils.R'
     'uniprot.R'
     'zinc_tools.R'
 RoxygenNote: 5.0.1
+Suggests: knitr,
+    rmarkdown
+VignetteBuilder: knitr
