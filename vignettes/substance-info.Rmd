@@ -1,24 +1,23 @@
 ---
 title: "Retrieving Substance Information"
 author: "Matthew O'Meara"
-date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteIndexEntry{Retrieving Substance Information}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 
-This vignette describes several use cases for retrieving substance information from zinc15.docking.org using the `Zn` R package.
+This vignette describes several use cases for retrieving substance information from zinc15.docking.org using the `Zr` R package.
 
-To follow along, make sure Zn package is installed
+To follow along, make sure Zr package is installed
 
 ```{r, fig.show='hold'}
 install.packages("devtools")
-devtools::install_github("momeara/Zn")
+devtools::install_github("momeara/Zr")
 ```
 
-And familiarize yourself with with `http://zinc15.docking.org
+And familiarize yourself with with http://zinc15.docking.org
 
 ## Searching for Substance info
 

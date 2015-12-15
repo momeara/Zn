@@ -8,3 +8,6 @@ From within R,
     install.packages("devtools")
     devtools::install_github("momeara/Zn")
 
+
+## Documentation
+As a starting place, please look at this vignette: https://github.com/momeara/Zr/blob/master/vignettes/substance-info.Rmd
