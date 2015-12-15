@@ -6,7 +6,7 @@ This is a set of tools for retriving information from the zinc15.docking.org web
 From within R,
 
     install.packages("devtools")
-    devtools::install_github("momeara/Zn")
+    devtools::install_github("momeara/Zr")
 
 
 ## Documentation
