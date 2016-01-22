@@ -130,10 +130,10 @@ zinc_REST <- function(
 
 
 #' @export
-purchasable_compounds_for_target <- function(targets, ...) {
-	data_frame(target=targets) %>% plyr::adply(1, function(row){
+purchasable_compounds_for_ortholog <- function(orthologs, ...) {
+	data_frame(ortholog=orthologs) %>% plyr::adply(1, function(row){
 		zinc_REST(
-			path=paste0("targets/", row$target[1], "/substances.smi?purchasability=for-sale"),
+			path=paste0("orthologs/", row$ortholog[1], "/substances.smi?purchasability=for-sale"),
 			...)
 	})
 }
@@ -208,14 +208,14 @@ gene_to_substances <- function(
 	dplyr::data_frame(gene_name=gene_names) %>% plyr::adply(1, function(row){
 		zinc_REST(
 			path=paste0(
-				"targets/", row$gene_name[1], "/substances.csv?",
+				"genes/", row$gene_name[1], "/substances.csv?",
 				"output_fields=", paste(output_fields, collapse=" ")),
 			...)
 	})
 }
 
 #' @export
-target_to_substances <- function(
+ortholog_to_substances <- function(
 	uniprot_entries,
 	output_fields=c("preferred_name", "smiles", "purchasability"),
 	...
@@ -223,7 +223,7 @@ target_to_substances <- function(
 	dplyr::data_frame(uniprot_entry=uniprot_entries) %>% plyr::adply(1, function(row){
 		zinc_REST(
 			path=paste0(
-				"targets/", row$uniprot_entry[1], "/substances.csv?",
+				"orthologs/", row$uniprot_entry[1], "/substances.csv?",
 				"output_fields=", paste(output_fields, collapse=" ")),
 			...)
 	})
@@ -245,7 +245,7 @@ substance_to_genes <- function(
 }
 
 #' @export
-substance_to_targets <- function(
+substance_to_orthologs <- function(
 	zinc_ids,
 	output_fields=c("preferred_name", "smiles", "purchasability"),
 	...
@@ -253,7 +253,7 @@ substance_to_targets <- function(
 	dplyr::data_frame(zinc_id, zinc_ids) %>% plyr::adply(1, function(row){
 		zinc_REST(
 			path=paste0(
-				"substances/", row$zinc_id[1], "/targets.csv?",
+				"substances/", row$zinc_id[1], "/orthologs.csv?",
 				"output_fields=", paste(output_fields, collapse=" ")),
 			...)
 	})
