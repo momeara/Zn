@@ -61,7 +61,7 @@ zinc_REST <- function(
 		}
 		if((httr::status_code(r) < 200) | httr::status_code(r) >= 300){
 			cat("ERROR: url='", url, "'\n", sep="")
-			cat("status_code='", r %>% status_code(), "'\n", sep="")
+			cat("status_code='", r %>% httr::status_code(), "'\n", sep="")
 			stop()
 		}
 
