@@ -99,5 +99,51 @@ uniprot_entry_full <- function(
 	z
 }
 
+# retrieve taxa from uniprot descending from given ancestor
+# as of Feb 2016, columns are
+# Taxon	Mnemonic	Scientific name	Common name	Synonym	Other Names	Reviewed	Rank	Lineage	Parent	Virus hosts
+# 89096	ABRANA	brothrix andinus	Andean mouse	Abrothrix andinus (Philippi, 1858); Akodon andinus; Andean akodont	reviewed	Species	Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia; Eutheria; Euarchontoglires; Glires; Rodentia; Sciurognathi; Muroidea; Cricetidae; Sigmodontinae; Abrothrix	156196
+uniprot_taxa <- function(
+	user_agent, # e.g. user_agent("httr name@example.com")
+	ancestor=7711, # chordate
+	reviewed=TRUE,
+	format='tab',
+	compress=TRUE,
+	verbose=F
+){
+	library(httr)
+	library(plyr)
+	library(dplyr)
+	library(readr)
+	if(verbose){
+		cat("Retriving taxa descending from '", ancestor, "' from uniprot...\n")
+	}
+	query_arg <- paste0(
+		"rank:species ",
+		ifelse(reviewed, "uniprot:(reviewed:yes) ", ""),
+		"ancestor:", ancestor)
+
+	r <- httr::GET(
+		"http://www.uniprot.org/taxonomy/",
+		user_agent,
+		query = list(
+			query=query_arg,
+			format = 'tab',
+			compress=ifelse(compress, 'yes', 'no'))) %>%
+		httr::content()
+
+	if(r %>% is.null){
+		if(verbose){
+			cat(" None retrieved\n")
+		}
+		return(data_frame())
+	}
+
+	r %>%
+		rawConnection %>%
+		gzcon %>%
+		readr::read_tsv() %>%
+		return
+}
 
 
