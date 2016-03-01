@@ -103,6 +103,7 @@ uniprot_entry_full <- function(
 # as of Feb 2016, columns are
 # Taxon	Mnemonic	Scientific name	Common name	Synonym	Other Names	Reviewed	Rank	Lineage	Parent	Virus hosts
 # 89096	ABRANA	brothrix andinus	Andean mouse	Abrothrix andinus (Philippi, 1858); Akodon andinus; Andean akodont	reviewed	Species	Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia; Eutheria; Euarchontoglires; Glires; Rodentia; Sciurognathi; Muroidea; Cricetidae; Sigmodontinae; Abrothrix	156196
+#' @export
 uniprot_taxa <- function(
 	user_agent, # e.g. user_agent("httr name@example.com")
 	ancestor=7711, # chordate
