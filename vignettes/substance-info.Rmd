@@ -12,7 +12,7 @@ This vignette describes several use cases for retrieving substance information f
 
 To follow along, make sure Zr package is installed
 
-```{r, fig.show='hold'}
+```{r, eval=F}
 install.packages("devtools")
 devtools::install_github("momeara/Zr")
 ```
