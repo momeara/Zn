@@ -21,6 +21,7 @@ zinc_REST <- function(
 	post_data=NULL,
 	count='all',
 	result_batch_size=NULL,
+	page=NULL,
 	verbose=F
 ){
 	url <- paste(zinc_base_url, path, sep="/") %>%
@@ -82,8 +83,10 @@ zinc_REST <- function(
 	}
 
 	if(!is.null(result_batch_size)){
+		if(is.null(page)){
+			page <- 1
+		}
 		done <- FALSE
-		page <- 177
 		data <- NULL
 		data_page_tmp_fname <- paste0(tempfile(), "_zinc_query")
 		if(verbose){

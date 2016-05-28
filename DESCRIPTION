@@ -4,7 +4,7 @@ Version: 0.0.0.9000
 Title: R client for the zinc15.docking.org
 Description: The full name is ZIRConium which is an acronym for Zinc
     Interface/R Client (onium), but the element symbol for zirconium is Zr
-Authors@R: person("Matthew", "O'Meara", email = "mattjomeara@gmail.com",
+Authors@R: person(first="Matthew", given="O'Meara", email = "mattjomeara@gmail.com",
     role = c("aut", "cre"))
 URL: http://github.com/momeara/Zr
 BugReports: https://github.com/momeara/Zr/issues
