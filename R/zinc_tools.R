@@ -273,7 +273,7 @@ substance_to_protomers <- function(
 		"protomers.ph_mod_fk",
 		"protomers.true_logp",
 		"protomers.true_mwt"),
-	...)
+	...){
 	dplyr::data_frame(zinc_id=zinc_ids) %>% plyr::adply(1, function(row){
 		zinc_REST(
 			path=paste0(
