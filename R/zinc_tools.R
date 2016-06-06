@@ -111,7 +111,7 @@ zinc_REST <- function(
 				cur_count <- ifelse(is.null(data), 0, nrow(data))
 				new_count <- nrow(data_page)
 
-				if(count != 'all' && (cur_count + new_count > count)){
+				if(count != 'all' && (cur_count + new_count >= count)){
 					# the new data exceeds the requested number of entries
 					data <- data %>% rbind(data_page[1:(count - cur_count),])
 					done <- TRUE
