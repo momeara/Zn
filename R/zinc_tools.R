@@ -323,14 +323,28 @@ catalog_items <- function(
 catalog_protomers <- function(
 	catalog_short_name,
 	output_fields=c(
-		"protomers.zinc_id",
-		"protomers.prot_id",
-		"protomers.net_charge",
-		"protomers.desolv_apol",
-		"protomers.desolv_pol",
-		"protomers.ph_mod_fk",
-		"protomers.true_logp",
-		"protomers.true_mwt"),
+		"zinc_id",
+		"prot_id",
+		"smiles",
+		"net_charge",
+		"desolv_apol",
+		"desolv_pol",
+		"ph_mod_fk",
+		"true_logp",
+		"true_mwt",
+		"hba",
+		"hbd",
+		"num_aliphatic_rings",
+		"num_aromatic_rings",
+		"num_heavy_atoms",
+		"num_rotatable_bonds",
+		"chiral_centers",
+		"reactive",
+		"reactivity",
+		"tpsa",
+		"tranche_name",
+		"tranche_prefix"
+	),
 	...){
 	zinc_REST(
 		path=paste0(
