@@ -238,7 +238,7 @@ substance_to_genes <- function(
 	output_fields=c("name", "description", "major_class_name", "sub_class_name"),
 	...
 ){
-	dplyr::data_frame(zinc_id, zinc_ids) %>% plyr::adply(1, function(row){
+	dplyr::data_frame(zinc_id=zinc_ids) %>% plyr::adply(1, function(row){
 		zinc_REST(
 			path=paste0(
 				"substances/", row$zinc_id[1], "/genes.csv?",
@@ -253,7 +253,7 @@ substance_to_orthologs <- function(
 	output_fields=c("preferred_name", "smiles", "purchasability"),
 	...
 ){
-	dplyr::data_frame(zinc_id, zinc_ids) %>% plyr::adply(1, function(row){
+	dplyr::data_frame(zinc_id=zinc_ids) %>% plyr::adply(1, function(row){
 		zinc_REST(
 			path=paste0(
 				"substances/", row$zinc_id[1], "/orthologs.csv?",
@@ -261,6 +261,28 @@ substance_to_orthologs <- function(
 			...)
 	})
 }
+
+substance_to_protomers <- function(
+	zinc_ids,
+	output_fields=c(
+		"protomers.zinc_id",
+		"protomers.prot_id",
+		"protomers.net_charge",
+		"protomers.desolv_apol",
+		"protomers.desolv_pol",
+		"protomers.ph_mod_fk",
+		"protomers.true_logp",
+		"protomers.true_mwt"),
+	...)
+	dplyr::data_frame(zinc_id=zinc_ids) %>% plyr::adply(1, function(row){
+		zinc_REST(
+			path=paste0(
+				"substances/", row$zinc_id[1], "/protomers.csv?",
+				"output_fields=", paste(output_fields, collapse=" ")),
+			...)
+	})
+}
+
 
 #' @export
 catalog_info <- function(
@@ -293,6 +315,26 @@ catalog_items <- function(
 			"output_fields=", paste(output_fields, collapse=" ")),
 		...)
 }
+
+catalog_protomers <- function(
+	catalog_short_name,
+	output_fiels=c(
+		"protomers.zinc_id",
+		"protomers.prot_id",
+		"protomers.net_charge",
+		"protomers.desolv_apol",
+		"protomers.desolv_pol",
+		"protomers.ph_mod_fk",
+		"protomers.true_logp",
+		"protomers.true_mwt"),
+	...){
+	zinc_REST(
+		path=paste0(
+			"catalogs/", catalog_short_name, "/protomers.csv?",
+			"output_fields=", paste(output_fields, collapse=" ")),
+		...)
+}
+
 
 #' @export
 sea_score <- function(
