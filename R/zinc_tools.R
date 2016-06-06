@@ -319,6 +319,7 @@ catalog_items <- function(
 		...)
 }
 
+#' @export
 catalog_protomers <- function(
 	catalog_short_name,
 	output_fiels=c(
