@@ -322,7 +322,7 @@ catalog_items <- function(
 #' @export
 catalog_protomers <- function(
 	catalog_short_name,
-	output_fiels=c(
+	output_fields=c(
 		"protomers.zinc_id",
 		"protomers.prot_id",
 		"protomers.net_charge",
