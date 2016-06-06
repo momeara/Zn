@@ -1,8 +1,11 @@
 # -*- tab-width:2;indent-tabs-mode:t;show-trailing-whitespace:t;rm-trailing-spaces:t -*-
 # vi: set ts=2 noet:
 
-sea15_base_url <- "http://sea15.docking.org"
-zinc_base_url <- "http://zinc15.docking.org"
+#' @export
+sea15_base_url <- function(){"http://sea15.docking.org"}
+
+#' @export
+zinc_base_url <- function(){"http://zinc15.docking.org"}
 
 ##TODO get post_data to work...
 ##this python works:
@@ -24,7 +27,7 @@ zinc_REST <- function(
 	page=NULL,
 	verbose=F
 ){
-	url <- paste(zinc_base_url, path, sep="/") %>%
+	url <- paste(zinc_base_url(), path, sep="/") %>%
 		httr::parse_url() %>%
 		httr::build_url()
 
