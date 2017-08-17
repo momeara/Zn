@@ -13,4 +13,3 @@ create date code of the form YYMMDD
 inputs:
    d (optional): date code in the format of Sys.Date() for which to generate the date code, defaulting to 'today'
 }
-

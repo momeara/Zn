@@ -25,6 +25,7 @@ zinc_REST <- function(
 	count='all',
 	result_batch_size=NULL,
 	page=NULL,
+	retry_attempts=5,
 	verbose=F
 ){
 	url <- paste(zinc_base_url(), path, sep="/") %>%
@@ -40,44 +41,57 @@ zinc_REST <- function(
 				cat(
 					"  post data:\n",
 					paste(
-						"    ", names(post_data), " having ", vapply(post_data, length, 1), " elements\n",
+						"    ", names(post_data), " having ",
+						vapply(post_data, function(x) length(stringr::str_split(x, "\\s+")[[1]]), 1), " elements\n",
 						sep=""),
 					sep="")
 			}
 		}
 
-		if(is.null(post_data)){
-			tryCatch({
-				r <- httr::GET(url)
-			}, error=function(e) {
-				cat("ERROR getting data from url: url='", url, "'\n", sep="")
-				print(e)
-				stop()
-			})
-		} else {
-			tryCatch({
-				r <- post(url, body=post_data)
-			}, error=function(e) {
-				cat("ERROR posting to url: url='", url, "'\n", sep="")
-				print(e)
-				stop()
-			})
+		succeeded <- FALSE
+		for( i in 1:(retry_attempts+1)){
+			r <- NULL
+			if(is.null(post_data)){
+				r <- tryCatch(
+					httr::GET(url),
+					error=function(e) {
+						cat("ERROR getting data from url: url='", url, "'\n", sep="")
+						print(e)
+						NULL
+					})
+			} else {
+				r <- tryCatch(
+					httr::POST(url, body=post_data),
+					error=function(e) {
+						cat("ERROR posting to url: url='", url, "'\n", sep="")
+						print(e)
+						NULL
+					})
+			}
+
+			if(is.null(r) || (httr::status_code(r) < 200) || (httr::status_code(r) >= 300)){
+				cat("ERROR: url='", url, "'\n", sep="")
+				if(!is.null(r)){
+					cat("status_code='", r %>% httr::status_code(), "'\n", sep="")
+				}
+				cat("retrying attempt ", i, " ... \n", sep="")
+			} else{
+				succeeded <- TRUE
+				break
+		  }
 		}
-		if((httr::status_code(r) < 200) | httr::status_code(r) >= 300){
-			cat("ERROR: url='", url, "'\n", sep="")
-			cat("status_code='", r %>% httr::status_code(), "'\n", sep="")
+		if(!succeeded){
+			cat("Failed after", retry_attempts, "attempts\n")
 			stop()
 		}
 
-		if( r %>% httr::content("text") == "") {
+		contents <- r %>% httr::content("text", encoding='UTF-8')
+		if( contents == "") {
 			return(data.frame())
 		}
 
 		tryCatch({
-			readr::read_delim(
-				r %>% httr::content("text"),
-				delim=",") %>%
-			return
+			return(readr::read_delim(contents, delim=","))
 		}, error = function(e){
 			cat("ERROR parsing url='", url, "'\n", sep="")
 			print(e)
@@ -147,19 +161,26 @@ purchasable_compounds_for_ortholog <- function(orthologs, ...) {
 #' @export
 substance_info <- function(
 	zinc_ids,
-	output_fields=c("preferred_name", "smiles", "purchasability"),
+	output_fields=c("zinc_id", "preferred_name", "smiles", "purchasability"),
+	batch_size=length(zinc_ids),
 	...){
-	zinc_REST(
-		path="substances.json",
-		post_data=list(
-			`zinc_id-in`=paste(zinc_ids),
-			output_fields=paste(output_fields, collapse=" ")))
+	data_frame(
+		zinc_id = zinc_ids,
+		batch_id = rep_len(1:ceiling(length(zinc_ids)/batch_size), length(zinc_ids))) %>%
+		plyr::ddply(c("batch_id"), function(df){
+			zinc_REST(
+				path="substances.csv",
+				post_data=list(
+					`zinc_id-in`=paste(df$zinc_id, collapse=" "),
+					output_fields=paste(output_fields, collapse=" ")),
+				...)}) %>%
+		dplyr::select(-batch_id)
 }
 
 #' @export
 search_for_substances <- function(
 	search_terms,
-	output_fields=c("preferred_name", "smiles", "purchasability"),
+	output_fields=c("zinc_id", "preferred_name", "smiles", "purchasability"),
 	...){
 	dplyr::data_frame(search_term=search_terms) %>% plyr::adply(1, function(row){
 		zinc_REST(
@@ -168,6 +189,30 @@ search_for_substances <- function(
 				"output_fields=", paste(output_fields, collapse=" ")),
 			...)
 	})
+}
+
+#' @export
+resolve_substances <- function(
+  smiles,
+	output_fields=c("zinc_id", "smiles", "preferred_name", "purchasability"),
+	structures=TRUE,
+	match_tolerance_retired=FALSE,
+	match_tolerance_charges=FALSE,
+	match_tolerance_scaffolds=FALSE,
+	match_tolerance_fulltext=FALSE,
+	match_tolerance_multiple=FALSE,
+	...){
+		zinc_REST(
+			path="http://zinc15.docking.org/substances/resolved/",
+			post_data=list(
+				paste=paste(smiles, collapse="\n"),
+				output_fields=paste(output_fields, collapse=" "),
+				structures=structures,
+				retired=match_tolerance_retired,
+				charges=match_tolerance_charges,
+				scaffolds=match_tolerance_scaffolds,
+				fulltext=match_tolerance_full_text,
+				multiple=match_tolerance_multiple))
 }
 
 #' @export
@@ -265,6 +310,7 @@ substance_to_orthologs <- function(
 	})
 }
 
+#' @export
 substance_to_protomers <- function(
 	zinc_ids,
 	output_fields=c(

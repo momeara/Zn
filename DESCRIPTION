@@ -22,7 +22,7 @@ License: MIT + file LICENSE
 Collage: 'r_utils.R'
     'uniprot.R'
     'zinc_tools.R'
-RoxygenNote: 5.0.1
+RoxygenNote: 6.0.1
 Suggests: knitr,
     rmarkdown
 VignetteBuilder: knitr

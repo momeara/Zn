@@ -10,4 +10,3 @@ tc_matrix(ref_smiles, query_smiles, verbose = F,
 \description{
 WARNING this may not work well
 }
-

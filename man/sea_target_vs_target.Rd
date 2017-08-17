@@ -13,4 +13,3 @@ sea_target_vs_target(ref_target, query_target,
 compute sea score given uniprot entries for targets
 for the substance fields
 }
-

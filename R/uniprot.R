@@ -117,7 +117,7 @@ uniprot_taxa <- function(
 	library(dplyr)
 	library(readr)
 	if(verbose){
-		cat("Retriving taxa descending from '", ancestor, "' from uniprot...\n")
+		cat("Retriving taxa descending from '", ancestor, "' from uniprot...\n", sep="")
 	}
 	query_arg <- paste0(
 		"rank:species ",
