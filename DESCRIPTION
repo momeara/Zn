@@ -21,7 +21,11 @@ Imports:
 License: MIT + file LICENSE
 Collage: 'r_utils.R'
     'uniprot.R'
-    'zinc_tools.R'
+    'zinc-catalog.R'
+    'zinc-gene.R'
+    'zinc-mapping.R'
+    'zinc-REST.R'
+    'zinc-substance.R'
 RoxygenNote: 6.0.1
 Suggests: knitr,
     rmarkdown
