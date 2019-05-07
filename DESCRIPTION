@@ -20,13 +20,14 @@ Imports:
     readr
 License: MIT + file LICENSE
 Collage: 'r_utils.R'
+    'sea-query.R'
     'uniprot.R'
     'zinc-catalog.R'
     'zinc-gene.R'
     'zinc-mapping.R'
     'zinc-REST.R'
     'zinc-substance.R'
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.1
 Suggests: knitr,
     rmarkdown
 VignetteBuilder: knitr

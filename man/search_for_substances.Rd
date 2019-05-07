@@ -5,7 +5,7 @@
 \title{Search for substances by search terms}
 \usage{
 search_for_substances(search_terms, output_fields = c("zinc_id",
-  "preferred_name", "smiles", "purchasability"), raw, ...)
+  "preferred_name", "smiles", "purchasability", "features"), raw, ...)
 }
 \description{
 Search for substances by search terms

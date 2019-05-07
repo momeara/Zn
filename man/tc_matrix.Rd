@@ -4,7 +4,7 @@
 \alias{tc_matrix}
 \title{WARNING this may not work well}
 \usage{
-tc_matrix(ref_smiles, query_smiles, verbose = F,
+tc_matrix(ref_smiles, query_smiles, run_tag, verbose = F,
   url_path = "tools/tc_matrix")
 }
 \description{

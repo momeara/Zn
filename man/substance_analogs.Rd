@@ -5,8 +5,10 @@
 \title{Search for analogs of the given substances}
 \usage{
 substance_analogs(zinc_ids, output_fields = c("zinc_id", "smiles",
-  "preferred_name", "purchasability"), fingerprint = "ecfp4_fp",
-  similarity = "tanimoto", threshold = 0.4, raw = FALSE, ...)
+  "preferred_name", "purchasability", "similarity", "features"),
+  fingerprint = "ecfp4_fp", similarity = "tanimoto", threshold = 30,
+  subsets = NULL, ref_batch_size = 20 * 10^6, ref_page = NULL,
+  max_zinc_id = 1.2 * 10^9, raw = FALSE, verbose = FALSE, ...)
 }
 \description{
 Search for analogs of the given substances
