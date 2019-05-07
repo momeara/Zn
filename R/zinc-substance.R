@@ -6,7 +6,7 @@
 #' @export
 standardize_zinc_ids <- function(zinc_ids){
 	plyr::llply(zinc_ids, function(zinc_id){
-		if(is.na(zinc_id){
+		if(is.na(zinc_id)){
 			return(NA)
 		} else {
 			paste0("ZINC", zinc_id %>% stringr::str_extract("[0-9]+$") %>% stringr::str_pad(12, "0"))
