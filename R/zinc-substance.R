@@ -116,7 +116,7 @@ substance_info <- function(
 search_for_substances <- function(
 	search_terms,
 	output_fields=c("zinc_id", "preferred_name", "smiles", "purchasability", "features"),
-	raw,
+	raw=FALSE,
 	...){
 	raw_results <- tibble::data_frame(search_term=search_terms) %>% plyr::adply(1, function(row){
 		zinc_REST(
