@@ -4,8 +4,13 @@
 \alias{search_for_substances}
 \title{Search for substances by search terms}
 \usage{
-search_for_substances(search_terms, output_fields = c("zinc_id",
-  "preferred_name", "smiles", "purchasability", "features"), raw, ...)
+search_for_substances(
+  search_terms,
+  output_fields = c("zinc_id", "preferred_name", "smiles", "purchasability",
+    "features"),
+  raw = FALSE,
+  ...
+)
 }
 \description{
 Search for substances by search terms

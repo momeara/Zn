@@ -5,9 +5,13 @@
 \title{compute sea score given uniprot entries for targets
 for the substance fields}
 \usage{
-sea_target_vs_target(ref_target, query_target,
+sea_target_vs_target(
+  ref_target,
+  query_target,
   substance_fields = c("preferred_name", "smiles", "purchasability"),
-  Tc_matrix = TRUE, verbose)
+  Tc_matrix = TRUE,
+  verbose
+)
 }
 \description{
 compute sea score given uniprot entries for targets

@@ -4,9 +4,14 @@
 \alias{substance_info}
 \title{Lookup info on substances by zinc_ids}
 \usage{
-substance_info(zinc_ids, output_fields = c("zinc_id", "preferred_name",
-  "smiles", "purchasability", "features"), batch_size = length(zinc_ids),
-  raw = FALSE, ...)
+substance_info(
+  zinc_ids,
+  output_fields = c("zinc_id", "preferred_name", "smiles", "purchasability",
+    "features"),
+  batch_size = length(zinc_ids),
+  raw = FALSE,
+  ...
+)
 }
 \description{
 Lookup info on substances by zinc_ids

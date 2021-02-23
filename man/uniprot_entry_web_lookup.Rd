@@ -4,8 +4,7 @@
 \alias{uniprot_entry_web_lookup}
 \title{See http://www.uniprot.org/help/uniprotkb_column_names for available columns}
 \usage{
-uniprot_entry_web_lookup(uniprot_entries, columns, user_agent_arg,
-  verbose = F)
+uniprot_entry_web_lookup(uniprot_entries, columns, user_agent_arg, verbose = F)
 }
 \description{
 See http://www.uniprot.org/help/uniprotkb_column_names for available columns

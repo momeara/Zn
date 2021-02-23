@@ -27,7 +27,7 @@ Collage: 'r_utils.R'
     'zinc-mapping.R'
     'zinc-REST.R'
     'zinc-substance.R'
-RoxygenNote: 6.1.1
+RoxygenNote: 7.1.1
 Suggests: knitr,
     rmarkdown
 VignetteBuilder: knitr
