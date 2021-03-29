@@ -20,12 +20,13 @@ zinc_base_url <- function(){"http://zinc15.docking.org"}
 #' @export
 zinc_REST <- function(
 	path,
-	post_data=NULL,
-	count='all',
-	result_batch_size=NULL,
-	page=NULL,
-	retry_attempts=5,
-	verbose=F
+	post_data = NULL,
+	count = "all",
+	result_batch_size = NULL,
+	temp_file_base = tempfile(),
+	page = NULL,
+	retry_attempts = 5,
+	verbose = FALSE
 ){
 	url <- paste(zinc_base_url(), path, sep="/") %>%
 		httr::parse_url() %>%
@@ -117,7 +118,7 @@ zinc_REST <- function(
 		}
 		done <- FALSE
 		data <- NULL
-		data_page_tmp_fname <- paste0(tempfile(), "_zinc_query")
+		data_page_tmp_fname <- paste0(temp_file_base, "_zinc_query")
 		if(verbose){
 			cat("writing temporary results to '", data_page_tmp_fname, "_<page>.csv\n", sep="")
 		}
