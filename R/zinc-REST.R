@@ -26,25 +26,26 @@ zinc_REST <- function(
 	temp_file_base = tempfile(),
 	page = NULL,
 	retry_attempts = 5,
-	verbose = FALSE
-){
-	url <- paste(zinc_base_url(), path, sep="/") %>%
+	verbose = FALSE,
+	...
+) {
+	url <- paste(zinc_base_url(), path, sep = "/") %>%
 		httr::parse_url() %>%
 		httr::build_url()
 
 
-	make_request <- function(url, post_data){
-		if(verbose){
+	make_request <- function(url, post_data) {
+		if (verbose) {
 			cat("making request:\n")
 			cat("  url: ", url, "\n")
-			if(!is.null(post_data)){
+			if (!is.null(post_data)) {
 				post_args <- ""
-				for(i in 1:length(post_data)){
+				for (i in 1:length(post_data)) {
 					elements <- stringr::str_split(post_data[i], "\\s+")[[1]]
-					if(length(elements) <= 5){
+					if (length(elements) <= 5) {
 						value <- post_data[i]
 					} else{
-						value <- paste0(paste0(elements[1:5], collapse=" "), " ... <", length(elements) - 5, " more>")
+						value <- paste0(paste0(elements[1:5], collapse = " "), " ... <", length(elements) - 5, " more>")
 					}
 					post_args <- paste(post_args, "   ", names(post_data)[i], "=", value, "\n")
 				}
@@ -53,39 +54,39 @@ zinc_REST <- function(
 		}
 
 		succeeded <- FALSE
-		for( i in 1:(retry_attempts+1)){
-		  if(i > 1){
-				cat("retrying attempt ", i, " ... \n", sep="")
+		for (i in 1:(retry_attempts + 1)) {
+		  if (i > 1) {
+				cat("retrying attempt ", i, " ... \n", sep = "")
 			}
 			r <- NULL
 			if(is.null(post_data)){
 				r <- tryCatch(
-					httr::GET(url),
-					error=function(e) {
-						cat("ERROR getting data from url: url='", url, "'\n", sep="")
+					httr::GET(url, ...),
+					error = function(e) {
+						cat("ERROR getting data from url: url='", url, "'\n", sep = "")
 						print(e)
 						NULL
 					})
 			} else {
 				r <- tryCatch(
-					httr::POST(url, body=post_data),
-					error=function(e) {
+					httr::POST(url, body = post_data, ...),
+					error = function(e) {
 						cat("ERROR posting to url: url='", url, "'\n", sep="")
 						print(e)
 						NULL
 					})
 			}
 
-			if(is.null(r) || (httr::status_code(r) < 200) || (httr::status_code(r) >= 300)){
-				cat("ERROR: url='", url, "'\n", sep="")
-				if(!is.null(post_data)){
+			if (is.null(r) || (httr::status_code(r) < 200) || (httr::status_code(r) >= 300)) {
+				cat("ERROR: url='", url, "'\n", sep = "")
+				if (!is.null(post_data)) {
 					cat("ERROR: post_data:\nERROR:  ",
 						paste(
 							paste0(names(post_data), "=", post_data),
-							collapse="\nERROR:  "),
-						"\n", sep="")
+							collapse = "\nERROR:  "),
+						"\n", sep = "")
 				}
-				if(!is.null(r)){
+				if (!is.null(r)) {
 					cat("status_code='", r %>% httr::status_code(), "'\n", sep="")
 				}
 			} else{

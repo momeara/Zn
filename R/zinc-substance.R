@@ -118,17 +118,20 @@ substance_info <- function(
 #' @export
 search_for_substances <- function(
 	search_terms,
-	output_fields=c("zinc_id", "preferred_name", "smiles", "purchasability", "features"),
-	raw=FALSE,
-	...){
-	raw_results <- tibble::data_frame(search_term=search_terms) %>% plyr::adply(1, function(row){
-		zinc_REST(
-			path=paste0(
-				"substances/search?output_format=csv&q=", row$search_term[1], "&",
-				"output_fields=", paste(output_fields, collapse=" ")),
-			...)
-	})
-	if(!raw){
+	output_fields = c("zinc_id", "preferred_name", "smiles", "purchasability", "features"),
+	raw = FALSE,
+	...) {
+		raw_results <- tibble::data_frame(search_term = search_terms) %>%
+			plyr::adply(1, function(row) {
+  		zinc_REST(
+  			path = "substances/search",
+  			query = list(
+  				output_format = "cvs",
+  				q = row$search_sterm[1],
+  				output_fields = paste(output_fields, collapse = " ")),
+  			...)
+  	})
+	if (!raw) {
 		results <- process_substance_info(raw_results)
 	} else {
 	  results <- raw_results
