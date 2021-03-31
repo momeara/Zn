@@ -35,34 +35,34 @@ uniprot_entry_web_lookup <- function(
 	uniprot_entries,
 	columns,
 	user_agent_arg,
-	verbose=F
-){
-	column_arg <- paste0(columns, collapse=",")
-	if(verbose){
-		cat("Getting data for ", length(uniprot_entries), " uniprot entries ... \n", sep="")
+	verbose = FALSE
+) {
+	column_arg <- paste0(columns, collapse = ",")
+	if (verbose) {
+		cat("Getting data for ", length(uniprot_entries), " uniprot entries ... \n", sep = "")
 	}
 	r2 <- plyr::adply(
-		dplyr::data_frame(uniprot_entry = uniprot_entries),
+		tibble::tibble(uniprot_entry = uniprot_entries),
 		1,
-		function(df){
-			if(verbose){
+		function(df) {
+			if (verbose) {
 				cat("Looking up entry for '", df$uniprot_entry, "' ... ", sep="")
 			}
 			r <- httr::GET(
 				"http://www.uniprot.org/uniprot/",
 				user_agent_arg,
 				query = list(
-					query=df$uniprot_entry,
-					format = 'tab',
+					query = df$uniprot_entry,
+					format = "tab",
 					columns = column_arg)) %>%
 				httr::content()
-			if(r %>% is.null){
-				if(verbose){
+			if (r %>% is.null) {
+				if (verbose) {
 					cat(" MISSING\n")
 				}
-				return(dplyr::data_frame())
+				return(tibble::tibble())
 			} else {
-				if(verbose){
+				if (verbose) {
 					cat(" GOT IT\n")
 				}
 				r %>%
@@ -72,7 +72,7 @@ uniprot_entry_web_lookup <- function(
 					return
 			}
 		})
-	if(nrow(r2) == 0){
+	if (nrow(r2) == 0) {
 		cat("WARNING: no entries were found\n")
 	}
 	r2
@@ -106,17 +106,17 @@ uniprot_entry_full <- function(
 #' @export
 uniprot_taxa <- function(
 	user_agent, # e.g. user_agent("httr name@example.com")
-	ancestor=7711, # chordate
-	reviewed=TRUE,
-	format='tab',
-	compress=TRUE,
-	verbose=F
-){
+	ancestor = 7711, # chordate
+	reviewed = TRUE,
+	format = "tab",
+	compress = TRUE,
+	verbose = FALSE
+) {
 	library(httr)
 	library(plyr)
 	library(dplyr)
 	library(readr)
-	if(verbose){
+	if (verbose) {
 		cat("Retriving taxa descending from '", ancestor, "' from uniprot...\n", sep="")
 	}
 	query_arg <- paste0(
@@ -128,16 +128,16 @@ uniprot_taxa <- function(
 		"http://www.uniprot.org/taxonomy/",
 		user_agent,
 		query = list(
-			query=query_arg,
-			format = 'tab',
-			compress=ifelse(compress, 'yes', 'no'))) %>%
+			query = query_arg,
+			format = "tab",
+			compress = ifelse(compress, "yes", "no"))) %>%
 		httr::content()
 
-	if(r %>% is.null){
-		if(verbose){
+	if (r %>% is.null) {
+		if (verbose) {
 			cat(" None retrieved\n")
 		}
-		return(data_frame())
+		return(tibble::tibble())
 	}
 
 	r %>%

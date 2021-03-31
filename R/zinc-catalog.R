@@ -26,11 +26,10 @@ catalog_items <- function(
 		"substance.rb",
 		"substance.reactive",
 		"substance.features"),
-	...){
+	...) {
 	zinc_REST(
-		path=paste0(
-			"catalogs/", catalog_short_name, "/items.csv?",
-			"output_fields=", paste(output_fields, collapse=" ")),
+		path = paste0("catalogs/", catalog_short_name, "/items.csv"),
+		query = list(output_fields = paste(output_fields, collapse=" ")),
 		...)
 }
 
@@ -59,10 +58,9 @@ catalog_protomers <- function(
 		"tpsa",
 		"tranche_name",
 		"tranche_prefix"),
-	...){
+	...) {
 	zinc_REST(
-		path=paste0(
-			"catalogs/", catalog_short_name, "/protomers.csv?",
-			"output_fields=", paste(output_fields, collapse=" ")),
+		path = paste0("catalogs/", catalog_short_name, "/protomers.csv"),
+		query = list(output_fields = paste(output_fields, collapse = " ")),
 		...)
 }

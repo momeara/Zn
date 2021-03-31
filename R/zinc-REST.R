@@ -32,7 +32,7 @@ zinc_REST <- function(
 	url <- paste(zinc_base_url(), path, sep = "/") %>%
 		httr::parse_url() %>%
 		httr::build_url()
-
+	url_args <- list(...)
 
 	make_request <- function(url, post_data) {
 		if (verbose) {
@@ -49,7 +49,7 @@ zinc_REST <- function(
 					}
 					post_args <- paste(post_args, "   ", names(post_data)[i], "=", value, "\n")
 				}
-				cat("  post data:\n", post_args, sep="")
+				cat("  post data:\n", post_args, sep = "")
 			}
 		}
 
@@ -59,19 +59,19 @@ zinc_REST <- function(
 				cat("retrying attempt ", i, " ... \n", sep = "")
 			}
 			r <- NULL
-			if(is.null(post_data)){
+			if (is.null(post_data)) {
 				r <- tryCatch(
-					httr::GET(url, ...),
-					error = function(e) {
-						cat("ERROR getting data from url: url='", url, "'\n", sep = "")
-						print(e)
-						NULL
-					})
+					do.call(httr::GET, args = c(url = url, url_args)),
+				  error = function(e) {
+					  cat("ERROR getting data from url: url='", url, "'\n", sep = "")
+					  print(e)
+					  NULL
+				  })
 			} else {
 				r <- tryCatch(
-					httr::POST(url, body = post_data, ...),
+					do.call(httr::POST, args = c(url = url, body = post_data, url_args)),
 					error = function(e) {
-						cat("ERROR posting to url: url='", url, "'\n", sep="")
+						cat("ERROR posting to url: url='", url, "'\n", sep = "")
 						print(e)
 						NULL
 					})
@@ -99,31 +99,31 @@ zinc_REST <- function(
 			stop()
 		}
 
-		contents <- r %>% httr::content("text", encoding='UTF-8')
+		contents <- r %>% httr::content("text", encoding = "UTF-8")
 		if( contents == "") {
 			return(data.frame())
 		}
 
 		tryCatch({
-			return(readr::read_delim(contents, delim=","))
-		}, error = function(e){
-			cat("ERROR parsing url='", url, "'\n", sep="")
+			return(readr::read_delim(contents, delim = ","))
+		}, error = function(e) {
+			cat("ERROR parsing url='", url, "'\n", sep = "")
 			print(e)
 			return(data.frame())
 		})
 	}
 
-	if(!is.null(result_batch_size)){
-		if(is.null(page)){
+	if (!is.null(result_batch_size)) {
+		if (is.null(page)) {
 			page <- 1
 		}
 		done <- FALSE
 		data <- NULL
 		data_page_tmp_fname <- paste0(temp_file_base, "_zinc_query")
-		if(verbose){
+		if (verbose) {
 			cat("writing temporary results to '", data_page_tmp_fname, "_<page>.csv\n", sep="")
 		}
-		while(!done){
+		while (!done) {
 			url_page <- url %>% httr::parse_url()
 			url_page$query$page <- page
 			url_page$query$count <- result_batch_size
@@ -132,16 +132,16 @@ zinc_REST <- function(
 
 			data_page %>% readr::write_csv(paste0(data_page_tmp_fname, "_", page, ".csv"))
 
-			if(is.null(data_page) || nrow(data_page) == 0){
+			if(is.null(data_page) || nrow(data_page) == 0) {
 				# there is no new data
 				done <- TRUE
 			} else {
 				cur_count <- ifelse(is.null(data), 0, nrow(data))
 				new_count <- nrow(data_page)
 
-				if(count != 'all' && (cur_count + new_count >= count)){
+				if(count != "all" && (cur_count + new_count >= count)) {
 					# the new data exceeds the requested number of entries
-					data <- data %>% rbind(data_page[1:(count - cur_count),])
+					data <- data %>% rbind(data_page[1:(count - cur_count), ])
 					done <- TRUE
 				} else {
 					# the new data does not exceed the requested number of entries

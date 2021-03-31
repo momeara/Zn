@@ -90,22 +90,22 @@ process_substance_info <- function(sub_info){
 #' @export
 substance_info <- function(
 	zinc_ids,
-	output_fields=c("zinc_id", "preferred_name", "smiles", "purchasability", "features"),
-	batch_size=length(zinc_ids),
-	raw=FALSE,
-	...){
-	raw_results <- tibble::data_frame(
+	output_fields = c("zinc_id", "preferred_name", "smiles", "purchasability", "features"),
+	batch_size = length(zinc_ids),
+	raw = FALSE,
+	...) {
+	raw_results <- tibble::tibble(
 		zinc_id = zinc_ids,
-		batch_id = rep_len(1:ceiling(length(zinc_ids)/batch_size), length(zinc_ids))) %>%
-		plyr::ddply(c("batch_id"), function(df){
+		batch_id = rep_len(1:ceiling(length(zinc_ids) / batch_size), length(zinc_ids))) %>%
+		plyr::ddply(c("batch_id"), function(df) {
 			zinc_REST(
-				path="substances.csv",
-				post_data=list(
-					`zinc_id-in`=paste(df$zinc_id, collapse=" "),
-					output_fields=paste(output_fields, collapse=" ")),
+				path = "substances.csv",
+				post_data = list(
+					`zinc_id-in` = paste(df$zinc_id, collapse = " "),
+					output_fields = paste(output_fields, collapse = " ")),
 				...)}) %>%
 		dplyr::select(-batch_id)
-	if(!raw){
+	if (!raw) {
 		results <- process_substance_info(raw_results)
 	} else {
 	  results <- raw_results
@@ -115,19 +115,22 @@ substance_info <- function(
 
 
 #' Search for substances by search terms
+#'
+#'   http://zinc15.docking.org/substances/search/?q=N%23CC1%3DCC%3DC%28C%3DC1%29C%28N1C%3DNC%3DN1%29C1%3DCC%3DC%28C%3DC1%29C%23N
+#'   http://zinc15.docking.org/substances/search/?count=all&output_format=cvs&q=N%23CC1%3DCC%3DC%28C%3DC1%29C%28N1C%3DNC%3DN1%29C1%3DCC%3DC%28C%3DC1%29C%23N&output_fields=zinc_id%20preferred_name%20smiles%20purchasability%20features]
 #' @export
 search_for_substances <- function(
 	search_terms,
 	output_fields = c("zinc_id", "preferred_name", "smiles", "purchasability", "features"),
 	raw = FALSE,
 	...) {
-		raw_results <- tibble::data_frame(search_term = search_terms) %>%
+		raw_results <- tibble::tibble(search_term = search_terms) %>%
 			plyr::adply(1, function(row) {
   		zinc_REST(
   			path = "substances/search",
   			query = list(
-  				output_format = "cvs",
-  				q = row$search_sterm[1],
+  				output_format = "csv",
+  				q = row$search_term[1],
   				output_fields = paste(output_fields, collapse = " ")),
   			...)
   	})
@@ -151,20 +154,21 @@ resolve_substances <- function(
 	match_tolerance_fulltext=FALSE,
 	match_tolerance_multiple=FALSE,
 	raw=FALSE,
-	...){
+	...
+) {
 	raw_results <- zinc_REST(
-			path="http://zinc15.docking.org/substances/resolved/",
-			post_data=list(
-				paste=paste(smiles, collapse="\n"),
-				output_fields=paste(output_fields, collapse=" "),
-				structures=structures,
-				retired=match_tolerance_retired,
-				charges=match_tolerance_charges,
-				scaffolds=match_tolerance_scaffolds,
-				fulltext=match_tolerance_full_text,
-				multiple=match_tolerance_multiple),
+			path = "http://zinc15.docking.org/substances/resolved/",
+			post_data = list(
+				paste = paste(smiles, collapse = "\n"),
+				output_fields = paste(output_fields, collapse = " "),
+				structures = structures,
+				retired = match_tolerance_retired,
+				charges = match_tolerance_charges,
+				scaffolds = match_tolerance_scaffolds,
+				fulltext = match_tolerance_full_text,
+				multiple = match_tolerance_multiple),
 			...)
-	if(!raw){
+	if (!raw) {
 		results <- process_substance_info(raw_results)
 	} else {
 	  results <- raw_results
@@ -177,42 +181,43 @@ resolve_substances <- function(
 substance_analogs <- function(
 	zinc_ids,
 	output_fields=c("zinc_id", "smiles", "preferred_name", "purchasability", "similarity", "features"),
-	fingerprint="ecfp4_fp",
-	similarity="tanimoto",
-	threshold=30,
-	subsets=NULL,
-	ref_batch_size=20*10^6,
-	ref_page=NULL,
-	max_zinc_id=1.2*10^9,
-	raw=FALSE,
-	verbose=FALSE,
-	...){
+	fingerprint = "ecfp4_fp",
+	similarity = "tanimoto",
+	threshold = 30,
+	subsets = NULL,
+	ref_batch_size = 20 * 10^6,
+	ref_page = NULL,
+	max_zinc_id = 1.2 * 10^9,
+	raw = FALSE,
+	verbose = FALSE,
+	...
+){
 
-	if(is.null(subsets)){
+	if (is.null(subsets)) {
 		path <- "substances.csv"
 	} else {
 		path <- paste0("substances/subsets/", subsets, ".csv")
 	}
 
-	plyr::ldply(zinc_ids, function(zinc_id){
+	plyr::ldply(zinc_ids, function(zinc_id) {
 		post_data <- list(
-			output_fields=paste(output_fields, collapse=" "))
+			output_fields = paste(output_fields, collapse = " "))
 		post_data[[paste0(fingerprint, "-", similarity, "-", threshold)]] <- zinc_id
-		if(is.null(ref_batch_size)){
+		if(is.null(ref_batch_size)) {
 			raw_results <- zinc_REST(
-				path=path,
-				post_data=post_data,
-				verbose=verbose,
+				path = path,
+				post_data = post_data,
+				verbose = verbose,
 				...)
 		} else {
 
 			# search over slices of the zinc database to avoid time out errors
-			if(is.null(ref_page)){
+			if (is.null(ref_page)) {
 				ref_page <- 1
 			}
 			done <- FALSE
 			raw_results <- NULL
-			while(!done){
+			while (!done) {
 				post_data['zinc_id-between']= paste(
 					format(ref_batch_size * (ref_page-1) + 1, scientific=FALSE),
 					format(min(ref_batch_size * ref_page, max_zinc_id), scientific=FALSE))
@@ -222,10 +227,10 @@ substance_analogs <- function(
 					verbose=verbose,
 					...)
 
-				if(verbose){
+				if (verbose) {
 					cat("Found ", nrow(result_page), " analogs.\n", sep="")
 				}
-				
+
 				if(is.null(result_page) || nrow(result_page) == 0){
 					done <- TRUE
 				} else {

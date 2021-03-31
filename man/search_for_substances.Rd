@@ -13,5 +13,6 @@ search_for_substances(
 )
 }
 \description{
-Search for substances by search terms
+http://zinc15.docking.org/substances/search/?q=N%23CC1%3DCC%3DC%28C%3DC1%29C%28N1C%3DNC%3DN1%29C1%3DCC%3DC%28C%3DC1%29C%23N
+  http://zinc15.docking.org/substances/search/?count=all&output_format=cvs&q=N%23CC1%3DCC%3DC%28C%3DC1%29C%28N1C%3DNC%3DN1%29C1%3DCC%3DC%28C%3DC1%29C%23N&output_fields=zinc_id%20preferred_name%20smiles%20purchasability%20features]
 }
