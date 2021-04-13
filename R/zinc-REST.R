@@ -68,8 +68,8 @@ zinc_REST <- function(
 					  NULL
 				  })
 			} else {
-				r <- tryCatch(
-					do.call(httr::POST, args = c(url = url, body = post_data, url_args)),
+  			r <- tryCatch(
+					do.call(httr::POST, args = c(list(url = url, body = post_data), url_args)),
 					error = function(e) {
 						cat("ERROR posting to url: url='", url, "'\n", sep = "")
 						print(e)
@@ -152,7 +152,9 @@ zinc_REST <- function(
 		}
 	} else {
 		url <- url %>% httr::parse_url()
-		url$query$count <- count
+		if (!is.null(count)) {
+			url$query$count <- count
+		}
 		url <- url %>% httr::build_url()
 		data <- make_request(url, post_data)
 	}
