@@ -11,3 +11,6 @@ demo/pandas
 ^README\.Rmd$
 ^revdep$
 ^README-.*\.png$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$

@@ -30,5 +30,6 @@ Collage: 'r_utils.R'
     'zinc-substance.R'
 RoxygenNote: 7.1.1
 Suggests: knitr,
+    markdown,
     rmarkdown
 VignetteBuilder: knitr
