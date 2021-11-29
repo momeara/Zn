@@ -176,8 +176,8 @@ resolve_substances <- function(
 #			charges = match_tolerance_charges,
 #			scaffolds = match_tolerance_scaffolds,
 #			fulltext = match_tolerance_fulltext,
-			multiple = match_tolerance_multiple,
-		  count = NULL,
+			multiple = match_tolerance_multiple),
+	  count = NULL,
 		...)
 	if (!raw) {
 		results <- process_substance_info(raw_results)

@@ -6,6 +6,8 @@
 \usage{
 resolve_substances(
   identifiers,
+  output_fields = c("zinc_id", "smiles", "preferred_name", "purchasability",
+    "features"),
   allow_lookup_zincids = TRUE,
   allow_lookup_structures = TRUE,
   allow_lookup_names = TRUE,
@@ -14,7 +16,7 @@ resolve_substances(
   match_tolerance_retired = FALSE,
   match_tolerance_charges = FALSE,
   match_tolerance_scaffolds = FALSE,
-  match_tolerance_full_text = FALSE,
+  match_tolerance_fulltext = FALSE,
   match_tolerance_multiple = FALSE,
   subsets_to_check = "all",
   raw = FALSE,
