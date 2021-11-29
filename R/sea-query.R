@@ -18,40 +18,40 @@ sea_score <- function(
 	verbose = F,
 	url_path="custom/search/single"
 ){
-	input_base <- paste(tempfile(), run_tag, sep="_")
-	url <- paste(sea_base_url(), url_path, sep="/") %>%
+	input_base <- paste(tempfile(), run_tag, sep = "_")
+	url <- paste(sea_base_url(), url_path, sep = "/") %>%
 		httr::parse_url() %>%
 		httr::build_url()
 
-	if(verbose){
+	if (verbose) {
 		cat("url: ", url, "\n")
 	}
 
-	if(is.character(ref_smi)){
-		if(!stringr::str_detect(ref_smi, ".smi$")){
+	if (is.character(ref_smi)) {
+		if (!stringr::str_detect(ref_smi, ".smi$")) {
 			cat("WARNING: referene .smi file '", ref_smi, "', does not end in '.smi'\n")
 		}
 		ref_smi_fname <- ref_smi
 	} else {
 		ref_smi_fname <- paste0(input_base, ".ref.smi")
-		cat("writing ref_smi to -> '", ref_smi_fname, "' ... ", sep="")
+		cat("writing ref_smi to -> '", ref_smi_fname, "' ... ", sep = "")
 		write.table(
 			ref_smi %>% dplyr::select(smiles, compound),
-			ref_smi_fname, quote=F, sep=" ", row.names=F, col.names=F)
+			ref_smi_fname, quote = F, sep = " ", row.names = F, col.names = F)
 		cat("DONE\n")
 	}
 
-	if(is.character(query_smi)){
-		if(!stringr::str_detect(query_smi, ".smi$")){
+	if (is.character(query_smi)) {
+		if (!stringr::str_detect(query_smi, ".smi$")) {
 			cat("WARNING: query .smi file '", query_smi, "', does not end in '.smi'\n")
 		}
 		query_smi_fname <- query_smi
 	} else {
 		query_smi_fname <- paste0(input_base, ".query.smi")
-		cat("writing query_smi to -> '", query_smi_fname, "' ... ", sep="")
+		cat("writing query_smi to -> '", query_smi_fname, "' ... ", sep = "")
 		write.table(
 			query_smi %>% dplyr::select(smiles, compound),
-			query_smi_fname, quote=F, sep=" ", row.names=F, col.names=F)
+			query_smi_fname, quote = F, sep = " ", row.names = F, col.names = F)
 		cat("DONE\n")
 	}
 
@@ -61,15 +61,15 @@ sea_score <- function(
 	tryCatch({
 		request <- httr::POST(
 			url,
-			httr::add_headers(Accept="application/json"),
-			body=list(
+			httr::add_headers(Accept = "application/json"),
+			body = list(
 				target_file = ref_smi_f,
 				query_file = query_smi_f,
-				as_set="yes",
-				wait="yes")) %>%
+				as_set = "yes",
+				wait = "yes")) %>%
 			httr::content()
-	}, error = function(e){
-		cat("ERROR parsing url='", url, "'\n", sep="")
+	}, error = function(e) {
+		cat("ERROR parsing url='", url, "'\n", sep = "")
 		print(e)
 		return(data.frame())
 	})
@@ -94,57 +94,57 @@ tc_matrix <- function(
 	verbose = F,
 	url_path="tools/tc_matrix"
 ){
-	input_base <- paste(tempfile(), run_tag, sep="_")
-	url <- paste(sea_base_url(), url_path, sep="/") %>%
+	input_base <- paste(tempfile(), run_tag, sep = "_")
+	url <- paste(sea_base_url(), url_path, sep = "/") %>%
 		httr::parse_url() %>%
 		httr::build_url()
 
-	if(verbose){
+	if (verbose) {
 		cat("url: ", url, "\n")
 	}
 
-	if(is.character(ref_smiles)){
-		if(!stringr::str_detect(ref_smiles, ".smi$")){
+	if (is.character(ref_smiles)) {
+		if (!stringr::str_detect(ref_smiles, ".smi$")) {
 			cat("WARNING: referene .smi file '", ref_smiles, "', does not end in '.smi'\n")
 		}
 		ref_smi_fname <- ref_smiles
 	} else {
 		ref_smi_fname <- paste0(input_base, ".ref.smi")
-		cat("writing ref_smi to -> '", ref_smi_fname, "' ... ", sep="")
+		cat("writing ref_smi to -> '", ref_smi_fname, "' ... ", sep = "")
 		write.table(
 			ref_smiles %>% dplyr::select(smiles, compound),
-			ref_smi_fname, quote=F, sep=" ", row.names=F, col.names=F)
+			ref_smi_fname, quote = F, sep = " ", row.names = F, col.names = F)
 		cat("DONE\n")
 	}
 
-	if(is.character(query_smiles)){
-		if(!stringr::str_detect(query_smiles, ".smi$")){
+	if (is.character(query_smiles)) {
+		if (!stringr::str_detect(query_smiles, ".smi$")) {
 			cat("WARNING: query .smi file '", query_smi, "', does not end in '.smi'\n")
 		}
 		query_smi_fname <- query_smiles
 	} else {
 		query_smi_fname <- paste0(input_base, ".query.smi")
-		cat("writing query_smi to -> '", query_smi_fname, "' ... ", sep="")
+		cat("writing query_smi to -> '", query_smi_fname, "' ... ", sep = "")
 		write.table(
 			query_smiles %>% dplyr::select(smiles, compound),
-			query_smi_fname, quote=F, sep=" ", row.names=F, col.names=F)
+			query_smi_fname, quote = F, sep = " ", row.names = F, col.names = F)
 		cat("DONE\n")
 	}
 
-	ref_smi_f <- httr::upload_file(ref_smi_fname, type="application/smil")
-	query_smi_f <- httr::upload_file(query_smi_fname, type="application/smil")
+	ref_smi_f <- httr::upload_file(ref_smi_fname, type = "application/smil")
+	query_smi_f <- httr::upload_file(query_smi_fname, type = "application/smil")
 
 	tryCatch({
 		request <- httr::POST(
 			url,
-			httr::add_headers(Accept="application/json"),
-			body=list(
+			httr::add_headers(Accept = "application/json"),
+			body = list(
 				target_file = ref_smi_f,
 				query_file = query_smi_f,
-				wait="yes")) %>%
+				wait = "yes")) %>%
 			httr::content()
-	}, error = function(e){
-		cat("ERROR parsing url='", url, "'\n", sep="")
+	}, error = function(e) {
+		cat("ERROR parsing url='", url, "'\n", sep = "")
 		print(e)
 		return(data.frame())
 	})
