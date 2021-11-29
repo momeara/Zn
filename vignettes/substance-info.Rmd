@@ -14,7 +14,7 @@ To follow along, make sure Zr package is installed
 
 ```{r, eval=F}
 install.packages("devtools")
-devtools::install_github("momeara/Zr")
+devtools::install_github("MaomLab/Zr")
 ```
 
 And familiarize yourself with with http://zinc15.docking.org
