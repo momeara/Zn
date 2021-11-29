@@ -5,15 +5,18 @@
 \title{Search for substances using smiles and fine grained tolerance criteria}
 \usage{
 resolve_substances(
-  smiles,
-  output_fields = c("zinc_id", "smiles", "preferred_name", "purchasability",
-    "features"),
-  structures = TRUE,
+  identifiers,
+  allow_lookup_zincids = TRUE,
+  allow_lookup_structures = TRUE,
+  allow_lookup_names = TRUE,
+  allow_lookup_suppliers = TRUE,
+  allow_lookup_analogs = TRUE,
   match_tolerance_retired = FALSE,
   match_tolerance_charges = FALSE,
   match_tolerance_scaffolds = FALSE,
   match_tolerance_full_text = FALSE,
   match_tolerance_multiple = FALSE,
+  subsets_to_check = "all",
   raw = FALSE,
   ...
 )

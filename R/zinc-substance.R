@@ -145,36 +145,40 @@ search_for_substances <- function(
 #' Search for substances using smiles and fine grained tolerance criteria
 #' @export
 resolve_substances <- function(
-  smiles,
+	identifiers,
 	output_fields = c("zinc_id", "smiles", "preferred_name", "purchasability", "features"),
-	structures = TRUE,
-	names = TRUE,
-	suppliers = FALSE,
-	analogs = FALSE,
-	retired = FALSE,
-	charges = FALSE,
-	scaffolds = FALSE,
-	fulltext = FALSE,
-	multiple = FALSE,
+	allow_lookup_zincids = TRUE,
+	allow_lookup_structures = TRUE,
+	allow_lookup_names = TRUE,
+	allow_lookup_suppliers = TRUE,
+	allow_lookup_analogs = TRUE,
+	match_tolerance_retired = FALSE,
+	match_tolerance_charges = FALSE,
+	match_tolerance_scaffolds = FALSE,
+	match_tolerance_fulltext = FALSE,
+	match_tolerance_multiple = FALSE,
+	subsets_to_check = "all",
 	raw = FALSE,
 	...
 ) {
 	raw_results <- zinc_REST(
-			path = "substances/resolved/",
-			post_data = list(
-				paste = paste(smiles, collapse = "\n"),
-				output_fields = paste(output_fields, collapse = " "),
-				output_format = 'csv',
-				structures = structures,
-				names = names,
-				suppliers = suppliers,
-				analogs = analogs,
-				retired = retired,
-				charges = charges,
-				scaffolds = scaffolds,
-				fulltext = fulltext,
-				multiple = multiple),
-			...)
+		path = "substances/resolved/",
+		post_data = list(
+			paste = paste(identifiers, collapse = "\n"),
+			output_fields = paste(output_fields, collapse = " "),
+			output_format = 'csv',
+			identifiers = allow_lookup_zincids,
+			structures = allow_lookup_structures,
+			names = allow_lookup_names,
+#			suppliers = allow_lookup_suppliers,
+#			analogs = allow_lookup_analogs,
+#			retired = match_tolerance_retired,
+#			charges = match_tolerance_charges,
+#			scaffolds = match_tolerance_scaffolds,
+#			fulltext = match_tolerance_fulltext,
+			multiple = match_tolerance_multiple,
+		  count = NULL,
+		...)
 	if (!raw) {
 		results <- process_substance_info(raw_results)
 	} else {
