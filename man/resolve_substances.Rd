@@ -12,7 +12,7 @@ resolve_substances(
   match_tolerance_retired = FALSE,
   match_tolerance_charges = FALSE,
   match_tolerance_scaffolds = FALSE,
-  match_tolerance_fulltext = FALSE,
+  match_tolerance_full_text = FALSE,
   match_tolerance_multiple = FALSE,
   raw = FALSE,
   ...

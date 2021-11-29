@@ -146,27 +146,34 @@ search_for_substances <- function(
 #' @export
 resolve_substances <- function(
   smiles,
-	output_fields=c("zinc_id", "smiles", "preferred_name", "purchasability", "features"),
-	structures=TRUE,
-	match_tolerance_retired=FALSE,
-	match_tolerance_charges=FALSE,
-	match_tolerance_scaffolds=FALSE,
-	match_tolerance_fulltext=FALSE,
-	match_tolerance_multiple=FALSE,
-	raw=FALSE,
+	output_fields = c("zinc_id", "smiles", "preferred_name", "purchasability", "features"),
+	structures = TRUE,
+	names = TRUE,
+	suppliers = FALSE,
+	analogs = FALSE,
+	retired = FALSE,
+	charges = FALSE,
+	scaffolds = FALSE,
+	fulltext = FALSE,
+	multiple = FALSE,
+	raw = FALSE,
 	...
 ) {
 	raw_results <- zinc_REST(
-			path = "http://zinc15.docking.org/substances/resolved/",
+			path = "substances/resolved/",
 			post_data = list(
 				paste = paste(smiles, collapse = "\n"),
 				output_fields = paste(output_fields, collapse = " "),
+				output_format = 'csv',
 				structures = structures,
-				retired = match_tolerance_retired,
-				charges = match_tolerance_charges,
-				scaffolds = match_tolerance_scaffolds,
-				fulltext = match_tolerance_full_text,
-				multiple = match_tolerance_multiple),
+				names = names,
+				suppliers = suppliers,
+				analogs = analogs,
+				retired = retired,
+				charges = charges,
+				scaffolds = scaffolds,
+				fulltext = fulltext,
+				multiple = multiple),
 			...)
 	if (!raw) {
 		results <- process_substance_info(raw_results)
